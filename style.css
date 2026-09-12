@@ -1,0 +1,548 @@
+/* ===== 1. CSS VARIABLES (our design system) ===== */
+:root {
+  --color-bg: #FBF8F3;        /* warm ivory background */
+  --color-text: #2E2A25;       /* near-black, softer than pure black */
+  --color-primary: #2F4B3C;     /* deep emerald green */
+  --color-accent: #C9A24B;       /* muted gold */
+  --color-white: #FFFFFF;
+
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Lato', sans-serif;
+
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+}
+
+/* ===== 2. RESET / BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  background-image: linear-gradient(rgba(251, 248, 243, 0.88), rgba(251, 248, 243, 0.88)), url("img/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== 3. HEADER / NAV ===== */
+.site-header {
+  background-color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-logo {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-md);
+}
+
+.nav-links a {
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-accent);
+}
+
+.nav-toggle {
+  display: none; /* hidden on desktop, shown later in mobile media query */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ===== 4. HERO SECTION ===== */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-image-placeholder {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: var(--spacing-md);
+  box-shadow: 0 8px 24px rgba(47, 75, 60, 0.14);
+}
+
+.hero-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.85rem;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero-names {
+  font-size: 3.5rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero-names span {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.hero-date {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.hero-message {
+  max-width: 500px;
+  margin: 0 auto var(--spacing-md);
+  color: #5A5548;
+}
+
+.hero-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btn {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-primary:hover {
+  background-color: #24392D;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* ===== 5. FOOTER ===== */
+.site-footer {
+  text-align: center;
+  padding: var(--spacing-md);
+  font-size: 0.85rem;
+  color: #8A8578;
+}
+
+/* ===== 6. INFO STRIP (Date & Venue) ===== */
+.info-strip {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  background-color: var(--color-white);
+  padding: var(--spacing-lg) var(--spacing-md);
+  text-align: center;
+}
+
+.info-card h2 {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== 7. GENERIC PAGE HEADER (used by every sub-page) ===== */
+.page-header {
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+}
+
+.page-header h1 {
+  font-size: 2.8rem;
+  color: var(--color-primary);
+}
+
+.page-header p {
+  color: #8A8578;
+  margin-top: 0.5rem;
+}
+
+/* ===== 8. ORDER OF PROGRAMME ===== */
+.programme-list {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.programme-image-wrap {
+  width: calc(100% - (2 * var(--spacing-md)));
+  max-width: 720px;
+  margin: 0 auto var(--spacing-md);
+}
+
+.programme-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(47, 75, 60, 0.14);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+.programme-note {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  color: #5A5548;
+  text-align: center;
+}
+
+.programme-item {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid #E4DED2;
+}
+
+.programme-time {
+  font-family: var(--font-heading);
+  color: var(--color-accent);
+  font-weight: 600;
+  min-width: 90px;
+}
+
+/* ===== 9. MENU GRID ===== */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.menu-card {
+  background-color: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.menu-card h3 {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* ===== 10. REGISTRY ===== */
+.registry-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.registry-card {
+  display: block;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--spacing-lg) var(--spacing-md);
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.registry-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ===== 11. COUNTDOWN ===== */
+.countdown {
+  text-align: center;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.countdown h2 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.countdown-box {
+  background-color: var(--color-white);
+  border-radius: 8px;
+  padding: var(--spacing-md);
+  min-width: 90px;
+}
+
+.countdown-box span {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  color: var(--color-primary);
+}
+
+.countdown-box p {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8A8578;
+  margin-top: 0.3rem;
+}
+
+/* ===== 14. RSVP (Google Form embed) ===== */
+.rsvp-form-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  background-color: var(--color-white);
+  border-radius: 8px;
+}
+
+.rsvp-form-wrapper iframe {
+  display: block;
+  width: 100%;
+  border-radius: 4px;
+}
+
+/* ===== 15. INVITE PAGE ===== */
+.invite-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+  text-align: center;
+}
+
+.invite-image-wrap {
+  width: min(100%, 520px);
+  margin: 0 auto var(--spacing-md);
+}
+
+.invite-image {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(47, 75, 60, 0.14);
+}
+
+.invite-message {
+  color: #5A5548;
+  margin-bottom: var(--spacing-sm);
+}
+
+.invite-names {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.invite-names span {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
+.invite-details {
+  line-height: 1.9;
+  margin-bottom: var(--spacing-md);
+}
+
+.invite-dresscode {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+}
+
+/* ===== 16. INFO PAGE ===== */
+.info-blocks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.info-block {
+  background-color: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: 8px;
+}
+
+.info-block h3 {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* ===== 17. RESPONSIVE: TABLET (768px and below) ===== */
+@media (max-width: 768px) {
+
+  .nav-links {
+    display: none;               /* hide the full link list by default on mobile */
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-white);
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.06);
+  }
+
+  .split-layout {
+    flex-direction: column;    /* stack image above content instead of side-by-side */
+  }
+
+  .split-image {
+    aspect-ratio: 16 / 9;       /* shorter, wider ratio suits a full-width stacked image better */
+  }
+
+  .nav-links.active {
+    display: flex;                /* JS will add "active" class when hamburger is clicked */
+  }
+
+  .nav-toggle {
+    display: block;                /* show the hamburger button, hidden on desktop */
+  }
+
+  .hero-names {
+    font-size: 2.5rem;              /* smaller heading, desktop size is too large for phones */
+  }
+
+  .menu-grid,
+  .registry-links,
+  .info-blocks {
+    grid-template-columns: 1fr;      /* collapse 2 columns into 1 stacked column */
+  }
+
+  .info-strip {
+    flex-direction: column;           /* stack Date/Venue instead of side-by-side */
+    gap: var(--spacing-md);
+  }
+
+  .countdown-grid {
+    flex-wrap: wrap;                   /* let the 4 countdown boxes wrap onto 2 rows if needed */
+  }
+}
+
+/* ===== 18. RESPONSIVE: SMALL MOBILE (480px and below) ===== */
+@media (max-width: 480px) {
+
+  .hero-names {
+    font-size: 2rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;    /* stack RSVP/View Invitation buttons instead of side-by-side */
+  }
+
+  .countdown-box {
+    min-width: 70px;
+    padding: var(--spacing-sm);
+  }
+
+  .countdown-box span {
+    font-size: 1.8rem;
+  }
+}
+
+/* ===== 19. SCROLL REVEAL ANIMATION ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== 20. IMAGE + CONTENT LAYOUT ===== */
+.split-layout {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.split-image {
+  flex: 3;                          /* takes 3 "shares" of the space */
+  aspect-ratio: 4 / 5;
+  background-color: #E4DED2;         /* placeholder color until a real photo is added */
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.split-content {
+  flex: 1;                            /* takes 1 "share" — roughly a quarter of the width */
+}
