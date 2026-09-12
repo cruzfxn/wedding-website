@@ -231,7 +231,7 @@ img {
 
 .programme-image-wrap {
   width: calc(100% - (2 * var(--spacing-md)));
-  max-width: 720px;
+  max-width: 900px;
   margin: 0 auto var(--spacing-md);
 }
 
