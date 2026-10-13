@@ -18,7 +18,7 @@
 
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="invite.html">Invite</a></li>
+        <li hidden><a href="invite.html" hidden data-invite-link>Invite</a></li>
         <li><a href="programme.html">Order of Programme</a></li>
         <li><a href="menu.html">Menu</a></li>
         <li><a href="registry.html">Registry</a></li>
@@ -38,15 +38,56 @@
   </section>
 
   <section class="rsvp-form-wrapper">
-    <iframe
-      src="https://forms.gle/dbgPEWetXXdQoTyT7"
-      width="100%"
-      height="900"
-      frameborder="0"
-      marginheight="0"
-      marginwidth="0">
-      Loading…
-    </iframe>
+    <div class="rsvp-intro">
+      <p>Sign in or create an account to register your details and manage your RSVP.</p>
+    </div>
+    <p id="rsvp-status" class="rsvp-status" role="status" aria-live="polite">Checking Supabase configuration...</p>
+
+    <section id="auth-section" class="rsvp-section" aria-labelledby="auth-heading">
+      <h2 id="auth-heading">Guest account</h2>
+      <div class="auth-mode" role="group" aria-label="Choose account action">
+        <button id="show-signin" class="auth-mode-button is-active" type="button" aria-pressed="true">Sign in</button>
+        <button id="show-signup" class="auth-mode-button" type="button" aria-pressed="false">Create account</button>
+      </div>
+      <form id="auth-form" class="rsvp-form">
+        <label id="full-name-label" for="auth-full-name" hidden>Full name</label>
+        <input id="auth-full-name" name="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Full name" hidden>
+        <label for="auth-email">Email address</label>
+        <input id="auth-email" name="email" type="email" autocomplete="email" required maxlength="254">
+        <label for="auth-password">Password</label>
+        <input id="auth-password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128">
+        <button id="auth-submit" class="btn btn-primary rsvp-submit" type="submit">Sign in</button>
+      </form>
+    </section>
+
+    <section id="profile-section" class="rsvp-section" aria-labelledby="profile-heading" hidden>
+      <h2 id="profile-heading">Complete your registration</h2>
+      <form id="profile-form" class="rsvp-form">
+        <label for="profile-full-name">Full name</label>
+        <input id="profile-full-name" name="fullName" type="text" autocomplete="name" required maxlength="120">
+        <button class="btn btn-primary rsvp-submit" type="submit">Save registration</button>
+      </form>
+    </section>
+
+    <section id="guest-section" class="rsvp-section" aria-labelledby="guest-heading" hidden>
+      <div class="guest-heading-row">
+        <h2 id="guest-heading">Your RSVP</h2>
+        <button id="signout-button" class="text-button" type="button">Sign out</button>
+      </div>
+      <p id="guest-email" class="guest-email"></p>
+      <p id="eligibility-status" class="eligibility-status"></p>
+      <p id="previous-rsvp" class="previous-rsvp"></p>
+      <form id="rsvp-form" class="rsvp-form" hidden>
+        <fieldset>
+          <legend>Will you be joining us?</legend>
+          <label class="radio-option"><input type="radio" name="attending" value="yes" required> Joyfully accepts</label>
+          <label class="radio-option"><input type="radio" name="attending" value="no" required> Regretfully declines</label>
+        </fieldset>
+        <label for="rsvp-notes">A note for the couple <span class="optional-label">(optional)</span></label>
+        <textarea id="rsvp-notes" name="notes" rows="4" maxlength="1000"></textarea>
+        <button class="btn btn-primary rsvp-submit" type="submit">Submit RSVP</button>
+      </form>
+    </section>
   </section>
 </main>
 
@@ -55,6 +96,7 @@
     <p>&copy; 2026 Subuola &amp; Olaoluwa</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>

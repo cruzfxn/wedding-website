@@ -356,19 +356,183 @@ img {
   margin-top: 0.3rem;
 }
 
-/* ===== 14. RSVP (Google Form embed) ===== */
+/* ===== 14. RSVP ===== */
 .rsvp-form-wrapper {
   max-width: 700px;
   margin: 0 auto;
   padding: var(--spacing-md);
   background-color: var(--color-white);
   border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(47, 75, 60, 0.08);
 }
 
-.rsvp-form-wrapper iframe {
-  display: block;
+.rsvp-intro {
+  margin-bottom: var(--spacing-sm);
+  color: #5A5548;
+  text-align: center;
+}
+
+.rsvp-status,
+.eligibility-status,
+.previous-rsvp {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  background-color: var(--color-bg);
+  color: #5A5548;
+}
+
+.rsvp-status {
+  margin-bottom: var(--spacing-md);
+}
+
+.rsvp-status[data-state="success"],
+.eligibility-status[data-state="eligible"] {
+  border-left: 3px solid var(--color-primary);
+}
+
+.rsvp-status[data-state="error"],
+.eligibility-status[data-state="revoked"] {
+  border-left: 3px solid #9B4B3D;
+}
+
+.rsvp-section {
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid #E4DED2;
+}
+
+.rsvp-section h2 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-primary);
+  font-size: 1.8rem;
+}
+
+.auth-mode {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.auth-mode-button,
+.text-button {
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.auth-mode-button {
+  padding: 0.45rem 0.8rem;
+  border-bottom: 2px solid transparent;
+}
+
+.auth-mode-button.is-active {
+  border-bottom-color: var(--color-accent);
+  font-weight: 700;
+}
+
+.rsvp-form {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.rsvp-form[hidden],
+.rsvp-section[hidden] {
+  display: none;
+}
+
+.rsvp-form label,
+.rsvp-form legend {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.rsvp-form input[type="text"],
+.rsvp-form input[type="email"],
+.rsvp-form input[type="password"],
+.rsvp-form textarea {
   width: 100%;
-  border-radius: 4px;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #D8D1C5;
+  border-radius: 5px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.rsvp-form input:focus,
+.rsvp-form textarea:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+.rsvp-form fieldset {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.5rem 0;
+  padding: 0;
+  border: 0;
+}
+
+.rsvp-form legend {
+  margin-bottom: 0.4rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 400 !important;
+}
+
+.radio-option input {
+  accent-color: var(--color-primary);
+}
+
+.rsvp-submit {
+  justify-self: start;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.rsvp-submit:disabled,
+.auth-mode-button:disabled,
+.text-button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.guest-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.text-button {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.guest-email {
+  margin: -0.5rem 0 var(--spacing-sm);
+  color: #8A8578;
+  overflow-wrap: anywhere;
+}
+
+.eligibility-status,
+.previous-rsvp {
+  margin: 0.6rem 0;
+}
+
+.eligibility-status[data-state="pending"] {
+  border-left: 3px solid var(--color-accent);
+}
+
+.optional-label {
+  color: #8A8578;
+  font-weight: 400;
 }
 
 /* ===== 15. INVITE PAGE ===== */

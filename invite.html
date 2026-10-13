@@ -18,7 +18,7 @@
 
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="invite.html">Invite</a></li>
+        <li hidden><a href="invite.html" hidden data-invite-link>Invite</a></li>
         <li><a href="programme.html">Order of Programme</a></li>
         <li><a href="menu.html">Menu</a></li>
         <li><a href="registry.html">Registry</a></li>
@@ -32,26 +32,20 @@
 
   <!-- ===== PAGE CONTENT GOES HERE ===== -->
 <main>
-  <section class="page-header">
+  <p id="invite-access-status" class="rsvp-status" role="status" aria-live="polite">Checking invitation access...</p>
+  <section class="page-header" id="invite-header" hidden>
     <h1>You're Invited</h1>
     <p>With love, we welcome you to our celebration</p>
   </section>
 
-  <section class="invite-content">
+  <section class="invite-content" id="invite-content" hidden>
     <figure class="invite-image-wrap">
-      <img src="img/invite.png" alt="Subuola and Olaoluwa's wedding invitation" class="invite-image">
+      <img id="private-invite-image" alt="Subuola and Olaoluwa's wedding invitation" class="invite-image">
     </figure>
-    <p class="invite-message">
-      Together with our families, we joyfully invite you to witness the union of
-    </p>
+    <p class="invite-message" id="invite-message"></p>
     <h2 class="invite-names">Subuola <span>&amp;</span> Olaoluwa</h2>
-    <p class="invite-details">
-      Tuesday, 22nd December 2026 &bull; 9:00 AM<br>
-      St. Michael's Cathedral, Abuja<br><br>
-      Reception to follow at 1:00 PM<br>
-      Grand Ballroom, Landmark Event Centre
-    </p>
-    <p class="invite-dresscode">Dress Code: Aso Ebi &mdash; Emerald &amp; Gold</p>
+    <p class="invite-details" id="invite-details"></p>
+    <p class="invite-dresscode" id="invite-dresscode"></p>
   </section>
 </main>
 
