@@ -3,100 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subuola & Olaoluwa | Our Wedding</title>
+  <meta name="referrer" content="no-referrer">
+  <title>RSVP | Subuola &amp; Olaoluwa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- ===== NAVIGATION ===== -->
-  <header class="site-header">
-    <nav class="main-nav">
-      <a href="index.html" class="nav-logo">S &amp; O</a>
-
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li hidden><a href="invite.html" hidden data-invite-link>Invite</a></li>
-        <li><a href="programme.html">Order of Programme</a></li>
-        <li><a href="menu.html">Menu</a></li>
-        <li><a href="registry.html">Registry</a></li>
-        <li><a href="rsvp.html">RSVP</a></li>
-        <li><a href="info.html">Info</a></li>
-      </ul>
-
-      <button class="nav-toggle" aria-label="Open menu">☰</button>
-    </nav>
-  </header>
-
-  <!-- ===== PAGE CONTENT GOES HERE ===== -->
-    <main>
-  <section class="page-header">
-    <h1>RSVP</h1>
-    <p>Kindly let us know if you'll be joining us by 22nd of December 2026</p>
-  </section>
-
-  <section class="rsvp-form-wrapper">
-    <div class="rsvp-intro">
-      <p>Sign in or create an account to register your details and manage your RSVP.</p>
-    </div>
-    <p id="rsvp-status" class="rsvp-status" role="status" aria-live="polite">Checking Supabase configuration...</p>
-
-    <section id="auth-section" class="rsvp-section" aria-labelledby="auth-heading">
-      <h2 id="auth-heading">Guest account</h2>
-      <div class="auth-mode" role="group" aria-label="Choose account action">
-        <button id="show-signin" class="auth-mode-button is-active" type="button" aria-pressed="true">Sign in</button>
-        <button id="show-signup" class="auth-mode-button" type="button" aria-pressed="false">Create account</button>
+  <header class="site-header"><nav class="main-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">S &amp; O</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li><li><a href="invite.html" data-invite-link>Invite</a></li>
+      <li><a href="rsvp.html" aria-current="page">RSVP</a></li><li><a href="programme.html">Order of Programme</a></li>
+      <li><a href="menu.html">Food Menu</a></li><li><a href="registry.html">Registry</a></li><li><a href="info.html">Info/FAQ</a></li>
+    </ul><button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+  </nav></header>
+  <main>
+    <section class="page-header"><h1>RSVP</h1><p>Kindly respond by <strong>Monday, 9 November 2026</strong></p></section>
+    <section class="rsvp-form-wrapper">
+      <div class="rsvp-intro">
+        <p>We can't wait to celebrate this special chapter with you!</p>
+        <p>To help us plan and make arrangements for our guests, kindly complete the RSVP form below to confirm your attendance.</p>
+        <p>Attending as a couple? You only need to register once. Simply select 2 guests and provide the full names of both attendees.</p>
+        <h2>Registration &amp; Entry</h2>
+        <p>Registration is required for all guests. Once you have registered, we will use your email address to send you your official invitation confirmation and QR code, which will be required for entry to the celebration.</p>
+        <p>Please ensure that your email address and guest details are correct.</p>
+        <p class="rsvp-deadline">RSVP Deadline: Monday, 9 November 2026</p>
+        <p>Kindly register by the deadline to allow us to finalise guest numbers and arrangements.</p>
+        <p>Thank you for helping us make this celebration special.</p>
+        <p>We look forward to celebrating with you!</p>
+        <p>With love,<br>Ṣubúọlá &amp; Ọláọlúwa</p>
       </div>
-      <form id="auth-form" class="rsvp-form">
-        <label id="full-name-label" for="auth-full-name" hidden>Full name</label>
-        <input id="auth-full-name" name="fullName" type="text" autocomplete="name" maxlength="120" placeholder="Full name" hidden>
-        <label for="auth-email">Email address</label>
-        <input id="auth-email" name="email" type="email" autocomplete="email" required maxlength="254">
-        <label for="auth-password">Password</label>
-        <input id="auth-password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128">
-        <button id="auth-submit" class="btn btn-primary rsvp-submit" type="submit">Sign in</button>
-      </form>
-    </section>
-
-    <section id="profile-section" class="rsvp-section" aria-labelledby="profile-heading" hidden>
-      <h2 id="profile-heading">Complete your registration</h2>
-      <form id="profile-form" class="rsvp-form">
-        <label for="profile-full-name">Full name</label>
-        <input id="profile-full-name" name="fullName" type="text" autocomplete="name" required maxlength="120">
-        <button class="btn btn-primary rsvp-submit" type="submit">Save registration</button>
-      </form>
-    </section>
-
-    <section id="guest-section" class="rsvp-section" aria-labelledby="guest-heading" hidden>
-      <div class="guest-heading-row">
-        <h2 id="guest-heading">Your RSVP</h2>
-        <button id="signout-button" class="text-button" type="button">Sign out</button>
-      </div>
-      <p id="guest-email" class="guest-email"></p>
-      <p id="eligibility-status" class="eligibility-status"></p>
-      <p id="previous-rsvp" class="previous-rsvp"></p>
-      <form id="rsvp-form" class="rsvp-form" hidden>
-        <fieldset>
-          <legend>Will you be joining us?</legend>
-          <label class="radio-option"><input type="radio" name="attending" value="yes" required> Joyfully accepts</label>
-          <label class="radio-option"><input type="radio" name="attending" value="no" required> Regretfully declines</label>
+      <p class="delivery-note">Automated invitation confirmation and QR code email delivery is not configured yet. Submitting this request does not approve it or grant invitation access.</p>
+      <p id="rsvp-status" class="rsvp-status" role="status" aria-live="polite">Loading RSVP form…</p>
+      <form id="rsvp-form" class="rsvp-form" novalidate>
+        <label for="full-name">Full Name</label><input id="full-name" name="fullName" type="text" autocomplete="name" required maxlength="120">
+        <fieldset><legend>Will you be attending?</legend>
+          <label class="radio-option"><input type="radio" name="attending" value="yes" required> Yes, joyfully accepts</label>
+          <label class="radio-option"><input type="radio" name="attending" value="no" required> No, regretfully declines</label>
         </fieldset>
-        <label for="rsvp-notes">A note for the couple <span class="optional-label">(optional)</span></label>
-        <textarea id="rsvp-notes" name="notes" rows="4" maxlength="1000"></textarea>
-        <button class="btn btn-primary rsvp-submit" type="submit">Submit RSVP</button>
+        <div id="guest-count-wrap"><label for="guest-count">Number of Guests</label><p class="field-hint">For more than 2 guests, please contact us.</p>
+          <select id="guest-count" name="guestCount"><option value="1">1 guest</option><option value="2">2 guests</option></select>
+        </div>
+        <div id="second-guest-wrap" hidden><label for="second-guest">Second Guest's Name</label><input id="second-guest" name="secondGuest" type="text" autocomplete="off" maxlength="120"></div>
+        <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254">
+        <label for="phone">Phone Number</label><input id="phone" name="phone" type="tel" autocomplete="tel" required minlength="7" maxlength="30" pattern="[+0-9 .\(\)\-]{7,30}" aria-describedby="phone-hint"><span id="phone-hint" class="field-hint">Include your country code if you are outside Nigeria.</span>
+        <button id="rsvp-submit" class="btn btn-primary rsvp-submit" type="submit">Submit RSVP</button>
       </form>
+      <section id="receipt-status" class="rsvp-section" aria-live="polite" hidden><h2>Your request</h2><p id="receipt-message" class="eligibility-status"></p><a id="approved-invite-link" class="btn btn-primary" href="invite.html" hidden>View Invitation</a></section>
+      <aside class="identity-limit"><strong>Please keep your private return link safe.</strong> We do not use guest accounts or passwords. The link identifies the request but does not prove who is using it; anyone who receives or copies it may use it. A name or email address alone is not secure authentication.</aside>
     </section>
-  </section>
-</main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <p>&copy; 2026 Subuola &amp; Olaoluwa</p>
-  </footer>
-
-  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="script.js"></script>
+  </main>
+  <footer class="site-footer"><p>&copy; 2026 Subuola &amp; Olaoluwa</p></footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script defer src="script.js"></script>
 </body>
 </html>

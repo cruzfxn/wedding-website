@@ -1,59 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subuola & Olaoluwa | Our Wedding</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Registry | Subuola &amp; Olaoluwa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!-- ===== NAVIGATION ===== -->
-  <header class="site-header">
-    <nav class="main-nav">
-      <a href="index.html" class="nav-logo">S &amp; O</a>
-
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li hidden><a href="invite.html" hidden data-invite-link>Invite</a></li>
-        <li><a href="programme.html">Order of Programme</a></li>
-        <li><a href="menu.html">Menu</a></li>
-        <li><a href="registry.html">Registry</a></li>
-        <li><a href="rsvp.html">RSVP</a></li>
-        <li><a href="info.html">Info</a></li>
-      </ul>
-
-      <button class="nav-toggle" aria-label="Open menu">☰</button>
-    </nav>
-  </header>
-
-  <!-- ===== PAGE CONTENT GOES HERE ===== -->
-<main>
-  <section class="page-header">
-    <h1>Gift Registry</h1>
-    <p>Your presence is the greatest gift — but if you'd like to bless us further</p>
-  </section>
-
-  <section class="registry-links">
-    <a href="#" class="registry-card">
-      <h3>Honeymoon Fund</h3>
-      <p>Help us start our journey together</p>
-    </a>
-    <a href="#" class="registry-card">
-      <h3>Home Registry</h3>
-      <p>Essentials for our new home</p>
-    </a>
-  </section>
-</main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
-    <p>&copy; 2026 Subuola &amp; Olaoluwa</p>
-  </footer>
-
+  <header class="site-header"><nav class="main-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">S &amp; O</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li><li><a href="invite.html" data-invite-link>Invite</a></li>
+      <li><a href="rsvp.html">RSVP</a></li><li><a href="programme.html">Order of Programme</a></li>
+      <li><a href="menu.html">Food Menu</a></li><li><a href="registry.html" aria-current="page">Registry</a></li><li><a href="info.html">Info/FAQ</a></li>
+    </ul><button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+  </nav></header>
+  <main>
+    <section class="page-header"><h1>Gift Registry</h1></section>
+    <section class="registry-message">
+      <p>Your presence is our greatest gift!</p>
+      <p>Having you celebrate this special chapter with us means more than words can express.</p>
+      <p>Should you wish to honour us with a gift, we kindly request the monetary equivalent in lieu of physical presents, as we will be unable to transport them after the celebration.</p>
+      <div class="bank-details" aria-label="Gift account details">
+        <p><span>Account holder</span>Oluwafunmi Elufioye</p>
+        <p><span>Account Number</span><strong id="account-number">6510147606</strong> <button id="copy-account-number" class="text-button" type="button">Copy account number</button></p>
+        <p><span>Bank</span>Providus</p>
+        <p id="copy-feedback" class="copy-feedback" role="status" aria-live="polite"></p>
+      </div>
+      <p>Thank you for your love, thoughtfulness and understanding.</p>
+      <p>With love,<br>Ṣubúọlá &amp; Ọláọlúwa</p>
+    </section>
+  </main>
+  <footer class="site-footer"><p>&copy; 2026 Subuola &amp; Olaoluwa</p></footer>
   <script src="script.js"></script>
 </body>
 </html>
