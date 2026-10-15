@@ -56,8 +56,37 @@ test("unknown, pending, rejected, and revoked requests cannot retrieve text or i
       assert.equal(response.status, 403);
       assert.equal(await response.text().then(body => body.includes("Protected invitation")), false);
     }
+    assert.equal(calls.checked.length, 2);
     assert.equal(calls.imageReads, 0);
   }
+});
+
+test("approval is checked again for each resource so a revoked receipt cannot fetch the image", async () => {
+  let checks = 0;
+  let imageReads = 0;
+  const handler = createProtectedInviteHandler({
+    checkStatus: async () => (++checks === 1 ? "approved" : "revoked"),
+    readImage: async () => { imageReads++; return new Uint8Array([1]); },
+    inviteDetails
+  });
+  const text = await handler(request());
+  const image = await handler(request("https://function.invalid/protected-invite?asset=invite.png"));
+  assert.equal(text.status, 200);
+  assert.equal(image.status, 403);
+  assert.equal(checks, 2);
+  assert.equal(imageReads, 0);
+});
+
+test("a stalled approval lookup returns a safe timeout response instead of hanging", async () => {
+  const handler = createProtectedInviteHandler({
+    checkStatus: () => new Promise(() => {}),
+    readImage: async () => new Uint8Array(),
+    inviteDetails,
+    timeoutMs: 10
+  });
+  const response = await handler(request());
+  assert.equal(response.status, 503);
+  assert.deepEqual(await response.json(), { error: "Invitation access could not be verified" });
 });
 
 test("approved receipt can retrieve invitation details and private image", async () => {

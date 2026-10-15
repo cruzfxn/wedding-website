@@ -121,7 +121,12 @@ Owner actions use `public.admin_list_invitation_requests()` and
 caller to be in `private.admin_users`; ordinary authenticated users and guests
 cannot list request details or change statuses. Add the selected owner/admin
 Auth UUID to that private allowlist only after reviewing the target project.
-The functions are database APIs; there is no owner dashboard in this site yet.
+The local `owner.html` dashboard signs in through Supabase Auth and checks
+`is_invitation_admin()` before requesting the owner-only list. Approval reuses
+`approve-guest`; rejection, revocation, and reopening use the owner-checked
+status RPC. Owners must already have an Auth account explicitly allowlisted in
+`private.admin_users`. The dashboard contains only the publishable key and is
+local code; it has not been deployed.
 
 The protected invitation Edge Function validates the receipt hash through
 `check_guest_request` on every content/image request, and serves the image from
@@ -133,7 +138,11 @@ copy `supabase/functions/protected-invite/invite.png` into `dist`.
 
 The follow-up migration `20261015000100_approval_email_outbox_and_count_rules.sql`
 removes the client-supplied attendee count; the database derives 0, 1, or 2 from
-the attendance answer and second guest name. Owner approval queues one email
+the attendance answer and second guest name. Local follow-up migrations
+`20261016000100_add_revoked_invitation_status.sql` and
+`20261016000200_invitation_parties_up_to_three.sql` add the revoked state and
+derive 0, 1, 2, or 3 attendees from the primary, second, and third full names.
+A third attendee requires the second attendee name. Owner approval queues one email
 event per request in a private outbox. The `approve-guest` Edge Function uses
 the authenticated owner JWT and the admin allowlist; it sends only queued (or
 explicitly retried, definitely failed) events. Repeated approval calls do not
@@ -148,8 +157,8 @@ Configure local Edge Function values in the ignored
 `BREVO_TEST_RECIPIENT` set to a designated test inbox and call the email
 function with `mode: "test"` before any guest delivery. A test message does not
 approve a request. Production secrets, migrations, or function deployments
-have not been changed. The site has no owner dashboard; use the owner-only RPCs
-or authenticated Edge Function tooling.
+have not been changed. The owner dashboard is available at `owner.html` after
+the local build and requires the existing owner allowlist.
 
 Brevo approval email code is prepared, but no credentials, verified sender, or
 designated test recipient are present in this workspace. The delivery path has

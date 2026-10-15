@@ -25,7 +25,7 @@
       <div class="rsvp-intro">
         <p>We can't wait to celebrate this special chapter with you!</p>
         <p>To help us plan and make arrangements for our guests, kindly complete the RSVP form below to confirm your attendance.</p>
-        <p>Attending as a couple? You only need to register once. Simply select 2 guests and provide the full names of both attendees.</p>
+        <p>You can register yourself and up to two companions in one request. Please provide the full name of every attendee.</p>
         <h2>Registration &amp; Entry</h2>
         <p>Registration is required for all guests. Once you have registered, we will use your email address to send you your official invitation confirmation and QR code, which will be required for entry to the celebration.</p>
         <p>Please ensure that your email address and guest details are correct.</p>
@@ -38,15 +38,16 @@
       <p class="delivery-note">Automated invitation confirmation and QR code email delivery is not configured yet. Submitting this request does not approve it or grant invitation access.</p>
       <p id="rsvp-status" class="rsvp-status" role="status" aria-live="polite">Loading RSVP form…</p>
       <form id="rsvp-form" class="rsvp-form" novalidate>
-        <label for="full-name">Full Name</label><input id="full-name" name="fullName" type="text" autocomplete="name" required maxlength="120">
+        <label for="full-name">Full Name</label><input id="full-name" name="fullName" type="text" autocomplete="name" required maxlength="120" pattern=".*\S.*" title="Enter your full name.">
         <fieldset><legend>Will you be attending?</legend>
           <label class="radio-option"><input type="radio" name="attending" value="yes" required> Yes, joyfully accepts</label>
           <label class="radio-option"><input type="radio" name="attending" value="no" required> No, regretfully declines</label>
         </fieldset>
-        <div id="guest-count-wrap"><label for="guest-count">Number of Guests</label><p class="field-hint">For more than 2 guests, please contact us.</p>
-          <select id="guest-count" name="guestCount"><option value="1">1 guest</option><option value="2">2 guests</option></select>
+        <div id="guest-count-wrap"><label for="guest-count">Total party size</label><p class="field-hint">Include yourself. You may bring up to two companions.</p>
+          <select id="guest-count" name="guestCount"><option value="1">1 attendee</option><option value="2">2 attendees</option><option value="3">3 attendees</option></select>
         </div>
-        <div id="second-guest-wrap" hidden><label for="second-guest">Second Guest's Name</label><input id="second-guest" name="secondGuest" type="text" autocomplete="off" maxlength="120"></div>
+        <div id="second-guest-wrap" hidden><label for="second-guest">Second Attendee's Full Name</label><input id="second-guest" name="secondGuest" type="text" autocomplete="off" maxlength="120" pattern=".*\S.*" title="Enter the second attendee's full name."></div>
+        <div id="third-guest-wrap" hidden><label for="third-guest">Third Attendee's Full Name</label><input id="third-guest" name="thirdGuest" type="text" autocomplete="off" maxlength="120" pattern=".*\S.*" title="Enter the third attendee's full name."></div>
         <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254">
         <label for="phone">Phone Number</label><input id="phone" name="phone" type="tel" autocomplete="tel" required minlength="7" maxlength="30" pattern="[+0-9 .\(\)\-]{7,30}" aria-describedby="phone-hint"><span id="phone-hint" class="field-hint">Include your country code if you are outside Nigeria.</span>
         <button id="rsvp-submit" class="btn btn-primary rsvp-submit" type="submit">Submit RSVP</button>

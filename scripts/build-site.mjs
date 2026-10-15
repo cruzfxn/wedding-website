@@ -16,7 +16,8 @@ const htmlPages = [
   "menu.html",
   "programme.html",
   "registry.html",
-  "rsvp.html"
+  "rsvp.html",
+  "owner.html"
 ];
 const publicImages = [
   "background.jpg",
@@ -28,7 +29,7 @@ const publicImages = [
 rmSync(outputDir, { recursive: true, force: true });
 mkdirSync(join(outputDir, "img"), { recursive: true });
 
-for (const file of [...htmlPages, "script.js", "style.css"]) {
+for (const file of [...htmlPages, "script.js", "owner.js", "style.css", "owner.css"]) {
   cpSync(join(projectRoot, file), join(outputDir, file));
 }
 

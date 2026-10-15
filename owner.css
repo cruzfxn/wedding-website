@@ -1,0 +1,31 @@
+.owner-dashboard { max-width: 1200px; margin: 0 auto; padding: var(--spacing-md); }
+.owner-dashboard [hidden] { display: none !important; }
+.owner-feedback { min-height: 1.5em; padding: 0.75rem 1rem; border-radius: 6px; background: #f4f0e8; }
+.owner-feedback[data-state="error"] { color: #8b2f25; background: #fbefed; }
+.owner-feedback[data-state="success"] { color: #285b3d; background: #edf6ef; }
+.owner-panel { max-width: 520px; margin: 2rem auto; padding: 2rem; background: #fff; border-radius: 10px; box-shadow: 0 8px 24px rgba(47, 75, 60, 0.12); }
+.owner-login-form { display: grid; gap: 0.65rem; }
+.owner-login-form input, .owner-toolbar select { min-height: 44px; padding: 0.55rem 0.7rem; border: 1px solid #b7aa91; border-radius: 5px; font: inherit; }
+.owner-login-form button { margin-top: 0.75rem; }
+.owner-toolbar { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin: 1.25rem 0; }
+.owner-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 0.8rem; margin: 1rem 0 1.5rem; }
+.owner-summary article { display: grid; gap: 0.3rem; padding: 1rem; background: #fff; border: 1px solid #e2dacb; border-radius: 8px; }
+.owner-summary span { color: #625d54; font-size: 0.9rem; }
+.owner-summary strong { color: var(--color-accent); font-size: 1.8rem; }
+.owner-table-wrap { overflow-x: auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(47, 75, 60, 0.08); }
+.owner-table { width: 100%; min-width: 900px; border-collapse: collapse; text-align: left; }
+.owner-table th, .owner-table td { padding: 0.8rem; border-bottom: 1px solid #eee8dd; vertical-align: top; }
+.owner-table th { color: #625d54; background: #f8f5ef; font-weight: 700; }
+.owner-attendee-list { margin: 0; padding-left: 1.2rem; }
+.owner-contact { line-height: 1.65; }
+.owner-contact a { overflow-wrap: anywhere; }
+.owner-status { display: inline-block; padding: 0.25rem 0.55rem; border-radius: 99px; text-transform: capitalize; background: #f1eee8; }
+.owner-status-approved { color: #285b3d; background: #edf6ef; }
+.owner-status-rejected, .owner-status-revoked { color: #8b2f25; background: #fbefed; }
+.owner-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.owner-actions .btn { padding: 0.45rem 0.7rem; font-size: 0.88rem; }
+@media (max-width: 640px) {
+  .owner-dashboard { padding: 1rem; }
+  .owner-panel { padding: 1.25rem; }
+  .owner-toolbar > * { flex: 1 1 auto; }
+}

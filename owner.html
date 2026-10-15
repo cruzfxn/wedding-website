@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Owner Dashboard | Subuola &amp; Olaoluwa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="owner.css">
+</head>
+<body>
+  <header class="site-header"><nav class="main-nav"><a href="index.html" class="nav-logo">S &amp; O</a><a href="index.html">Return to website</a></nav></header>
+  <main class="owner-dashboard">
+    <section class="page-header"><h1>Guest Requests</h1><p>Owner access only</p></section>
+    <p id="owner-feedback" class="owner-feedback" role="status" aria-live="polite">Loading owner dashboard…</p>
+    <section id="owner-login-panel" class="owner-panel" hidden>
+      <h2>Owner sign in</h2>
+      <p>Sign in with the owner account authorized for this Supabase project.</p>
+      <form id="owner-login-form" class="owner-login-form">
+        <label for="owner-email">Email</label><input id="owner-email" type="email" autocomplete="username" required maxlength="254">
+        <label for="owner-password">Password</label><input id="owner-password" type="password" autocomplete="current-password" required>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+      </form>
+    </section>
+    <section id="owner-dashboard-content" hidden>
+      <div class="owner-toolbar"><label for="owner-filter">Show requests</label><select id="owner-filter"><option value="all">All statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="revoked">Revoked</option></select><button id="owner-refresh" class="btn btn-secondary" type="button">Refresh</button><button id="owner-sign-out" class="text-button" type="button">Sign out</button></div>
+      <div class="owner-summary" aria-label="Guest totals">
+        <article><span>Pending requests</span><strong id="count-pending">0</strong></article>
+        <article><span>Approved requests</span><strong id="count-approved">0</strong></article>
+        <article><span>Rejected requests</span><strong id="count-rejected">0</strong></article>
+        <article><span>Revoked requests</span><strong id="count-revoked">0</strong></article>
+        <article><span>Approved attendees</span><strong id="count-attendees">0</strong></article>
+      </div>
+      <div class="owner-table-wrap"><table class="owner-table">
+        <thead><tr><th>Request</th><th>Attendees</th><th>Contact</th><th>Status</th><th>Submitted</th><th>Actions</th></tr></thead>
+        <tbody id="owner-requests"></tbody>
+      </table></div>
+    </section>
+  </main>
+  <footer class="site-footer"><p>&copy; 2026 Subuola &amp; Olaoluwa</p></footer>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script defer src="owner.js"></script>
+</body>
+</html>

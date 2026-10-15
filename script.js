@@ -58,13 +58,43 @@ try {
 }
 const inviteStatus = document.getElementById("invite-access-status"), inviteHeader = document.getElementById("invite-header"), inviteContent = document.getElementById("invite-content");
 let clientPromise;
+function fetchWithTimeout(input, init = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+  const callerSignal = init.signal;
+  const cancelFromCaller = () => controller.abort();
+  if (callerSignal) {
+    if (callerSignal.aborted) controller.abort();
+    else callerSignal.addEventListener("abort", cancelFromCaller, { once: true });
+  }
+  return fetch(input, { ...init, signal: controller.signal }).finally(() => {
+    clearTimeout(timeout);
+    if (callerSignal) callerSignal.removeEventListener("abort", cancelFromCaller);
+  });
+}
 function getClient() {
   if (!clientPromise) clientPromise = new Promise((resolve, reject) => {
-    const start = () => window.supabase?.createClient ? resolve(window.supabase.createClient(projectUrl, publishableKey)) : reject(new Error("Supabase client unavailable"));
+    let settled = false;
+    const finish = (error, client) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      if (error) reject(error); else resolve(client);
+    };
+    const start = () => window.supabase?.createClient
+      ? finish(null, window.supabase.createClient(projectUrl, publishableKey, { global: { fetch: fetchWithTimeout } }))
+      : finish(new Error("Supabase client unavailable"));
+    const timeout = setTimeout(() => finish(new Error("Supabase client loading timed out")), 12000);
     if (window.supabase?.createClient) start();
-    else { const script = document.createElement("script"); script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"; script.onload = start; script.onerror = () => reject(new Error("Could not load the RSVP service")); document.head.appendChild(script); }
+    else {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      script.onload = start;
+      script.onerror = () => finish(new Error("Could not load the RSVP service"));
+      document.head.appendChild(script);
+    }
   });
-  return clientPromise;
+  return clientPromise.catch(error => { clientPromise = null; throw error; });
 }
 function randomReceipt() {
   if (!globalThis.crypto || typeof globalThis.crypto.getRandomValues !== "function") {
@@ -84,7 +114,7 @@ async function hashReceipt(receipt) {
   const digest = await globalThis.crypto.subtle.digest("SHA-256", new globalThis.TextEncoder().encode(receipt));
   return Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, "0")).join("");
 }
-function showInvite(allowed, message) {
+function showInvite(allowed, message, retryable = false) {
   inviteLinks.forEach(link => { link.hidden = !allowed; if (link.closest("li")) link.closest("li").hidden = !allowed; });
   if (inviteHeader) inviteHeader.hidden = !allowed;
   if (inviteContent) inviteContent.hidden = !allowed;
@@ -94,6 +124,8 @@ function showInvite(allowed, message) {
     const image = document.getElementById("private-invite-image"); if (image) image.removeAttribute("src");
   }
   if (inviteStatus) { inviteStatus.hidden = allowed; inviteStatus.textContent = message || ""; }
+  const retry = document.getElementById("invite-retry");
+  if (retry) retry.hidden = allowed || !retryable;
 }
 function logInviteFailure(stage, error) {
   const diagnostic = { stage };
@@ -135,7 +167,7 @@ async function loadInvitation() {
     if (status !== "approved") { showInvite(false, status === "pending" ? "Your request is awaiting approval. Invitation access will be available if approved." : "Invitation access is not available for this request."); return; }
     const receiptHash = await hashReceipt(receipt);
     failureStage = "fetch_invitation_content";
-    const response = await fetch(projectUrl + "/functions/v1/protected-invite", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
+    const response = await fetchWithTimeout(projectUrl + "/functions/v1/protected-invite", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
     if (!response.ok) { const error = new Error("Invitation content request failed"); error.httpStatus = response.status; throw error; }
     const payload = await response.json();
     document.getElementById("invite-message").textContent = payload.message;
@@ -143,22 +175,27 @@ async function loadInvitation() {
     payload.details.forEach((line, i) => { if (i) details.appendChild(document.createElement("br")); if (line) details.appendChild(document.createTextNode(line)); });
     document.getElementById("invite-dresscode").textContent = payload.dressCode;
     failureStage = "fetch_invitation_image";
-    const imageResponse = await fetch(projectUrl + "/functions/v1/protected-invite?asset=invite.png", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
+    const imageResponse = await fetchWithTimeout(projectUrl + "/functions/v1/protected-invite?asset=invite.png", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
     if (!imageResponse.ok) { const error = new Error("Invitation image request failed"); error.httpStatus = imageResponse.status; throw error; }
     document.getElementById("private-invite-image").src = URL.createObjectURL(await imageResponse.blob());
     showInvite(true, "");
-  } catch (error) { logInviteFailure(failureStage, error); showInvite(false, "Invitation access could not be verified. Please return using your private RSVP link and try again."); }
+  } catch (error) { logInviteFailure(failureStage, error); showInvite(false, "We couldn't verify invitation access just now. Check your connection and try again.", true); }
 }
+const inviteRetry = document.getElementById("invite-retry");
+if (inviteRetry) inviteRetry.addEventListener("click", () => void loadInvitation());
 
 const form = document.getElementById("rsvp-form"), statusEl = document.getElementById("rsvp-status");
 if (form && statusEl) {
-  const count = document.getElementById("guest-count"), countWrap = document.getElementById("guest-count-wrap"), secondWrap = document.getElementById("second-guest-wrap"), secondGuest = document.getElementById("second-guest");
+  const count = document.getElementById("guest-count"), countWrap = document.getElementById("guest-count-wrap"), secondWrap = document.getElementById("second-guest-wrap"), secondGuest = document.getElementById("second-guest"), thirdWrap = document.getElementById("third-guest-wrap"), thirdGuest = document.getElementById("third-guest");
   let isSubmitting = false;
   const updateFields = () => {
     const attending = form.querySelector('input[name="attending"]:checked')?.value === "yes";
     countWrap.hidden = !attending; count.disabled = !attending;
-    secondWrap.hidden = !attending || count.value !== "2"; secondGuest.required = !secondWrap.hidden; secondGuest.disabled = secondWrap.hidden;
+    const partySize = Number(count.value);
+    secondWrap.hidden = !attending || partySize < 2; secondGuest.required = !secondWrap.hidden; secondGuest.disabled = secondWrap.hidden;
+    thirdWrap.hidden = !attending || partySize < 3; thirdGuest.required = !thirdWrap.hidden; thirdGuest.disabled = thirdWrap.hidden;
     if (secondWrap.hidden) secondGuest.value = "";
+    if (thirdWrap.hidden) thirdGuest.value = "";
   };
   form.querySelectorAll('input[name="attending"]').forEach(input => input.addEventListener("change", updateFields)); count.addEventListener("change", updateFields); updateFields();
   if (activeReceipt || invalidReceiptLink) form.hidden = true;
@@ -184,7 +221,8 @@ if (form && statusEl) {
       const response = await db.rpc("submit_guest_request", {
         p_full_name: String(data.get("fullName")).trim(), p_email: String(data.get("email")).trim(), p_phone: String(data.get("phone")).trim(),
         p_attending: attending,
-        p_second_guest_name: attending && count.value === "2" ? String(data.get("secondGuest")).trim() : null,
+        p_second_guest_name: attending && Number(count.value) >= 2 ? String(data.get("secondGuest")).trim() : null,
+        p_third_guest_name: attending && Number(count.value) === 3 ? String(data.get("thirdGuest")).trim() : null,
         p_receipt_hash: receiptHash
       });
       if (response.error) throw response.error;

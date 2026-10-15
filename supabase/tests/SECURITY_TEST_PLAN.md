@@ -74,38 +74,40 @@ run these steps against production data.
    it returns a request ID with status `pending`.
 2. Try to pass an eligibility status, edit the status directly, or read the
    request table as anon/authenticated. Confirm each is denied or unavailable.
-3. Confirm the database derives counts: decline with no second name stores 0;
-   accept with no second name stores 1; accept with a valid second name stores
-   2. Try a second name on a decline and invalid second names; confirm rejection.
-   Confirm there is no parameter that lets a client request count 3 or supply a
-   count inconsistent with names.
-4. Try malformed names, emails, phones, and receipt hashes; confirm rejection.
+3. Confirm the database derives counts: decline with no companion names stores
+   0; accept with no companion names stores 1; accept with a valid second name
+   stores 2; accept with valid second and third names stores 3. Confirm the
+   owner list returns every supplied attendee name and the matching count.
+4. Try a third name without a second name, blank or overlong companion names,
+   companion names on a declined request, and party sizes above 3. Confirm every
+   invalid case is rejected by the RPC or database constraint.
+5. Try malformed primary names, emails, phones, and receipt hashes; confirm rejection.
    Submit a repeated hash and confirm the unique constraint prevents duplicate
    receipt ownership.
-5. Call `check_guest_request` with the correct receipt hash; confirm it returns
+6. Call `check_guest_request` with the correct receipt hash; confirm it returns
    only the request status. Try a wrong or malformed hash; confirm no guest
    data or invitation content is returned.
-6. As an authenticated non-admin, call both admin RPCs; expect permission
-   errors. Add one selected test Auth UUID to `private.admin_users` locally,
-   then confirm the admin list contains request details and the status RPC can
-   approve/reject and audit changes.
-7. Confirm pending and rejected receipts receive HTTP 403 from the protected
+7. As anon and as authenticated non-admin, call `admin_list_invitation_requests`,
+   `set_invitation_request_status`, and `is_invitation_admin`; confirm no guest
+   details or status changes are exposed. As the allowlisted local owner,
+   confirm the list works and approve/reject/revoke/reopen actions are audited.
+8. Confirm pending, rejected, and revoked receipts receive HTTP 403 from the protected
    invitation function for both text and `asset=invite.png`; approved receipts
    receive both. Confirm the invitation image is absent from `dist/img`.
-8. Inspect `dist` and verify no password fields, login/registration links,
+9. Inspect `dist` and verify no guest login/registration links,
    invitation image, or invitation text are included in public files.
-9. As a non-admin, call `is_invitation_admin`, `claim_approval_email`, and
+10. As a non-admin, call `is_invitation_admin`, `claim_approval_email`, and
    `complete_approval_email`; confirm denial or false status. As an admin,
    approve a pending request twice and confirm there is one outbox event. Claim
    once and confirm a concurrent/repeated claim does not claim it again.
-10. Retry a definitely failed event explicitly and confirm the same event UUID
+11. Retry a definitely failed event explicitly and confirm the same event UUID
     is reused. Confirm `unknown`, `sending`, and `accepted` events cannot be
     resent; a repeated approval does not queue another event.
-11. Run `deno test supabase/functions/_shared/brevo_test.ts`. These mock tests
+12. Run `deno test supabase/functions/_shared/brevo_test.ts`. These mock tests
     verify the API key header, designated recipient payload, stable Brevo
     idempotency key, and handling of accepted, definite-failure, and ambiguous
     outcomes. Separately call `approve-guest` with `mode: "test"` and a
     designated test recipient only after local secrets and a local Supabase
     stack are configured. A 201/message ID means Brevo accepted the email, not
     that the recipient received it.
-12. Confirm the test email action does not change any request's approval state.
+13. Confirm the test email action does not change any request's approval state.
