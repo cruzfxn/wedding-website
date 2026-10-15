@@ -20,7 +20,7 @@ const htmlPages = [
 ];
 const publicImages = [
   "background.jpg",
-  "couple.jpeg",
+  "couple.png",
   "menu.jpg",
   "programme.jpeg"
 ];

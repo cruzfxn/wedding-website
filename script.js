@@ -95,6 +95,14 @@ function showInvite(allowed, message) {
   }
   if (inviteStatus) { inviteStatus.hidden = allowed; inviteStatus.textContent = message || ""; }
 }
+function logInviteFailure(stage, error) {
+  const diagnostic = { stage };
+  if (typeof error?.code === "string" && /^[A-Z0-9]{4,8}$/.test(error.code)) diagnostic.code = error.code;
+  const status = Number.isInteger(error?.httpStatus) ? error.httpStatus : error?.status;
+  if (Number.isInteger(status)) diagnostic.httpStatus = status;
+  if (typeof error?.name === "string") diagnostic.errorType = error.name;
+  console.error("Private invitation access failed", diagnostic);
+}
 async function checkRequest(client, receipt) {
   if (!receiptPattern.test(receipt)) throw new Error("This return link is not valid.");
   const { data, error } = await client.rpc("check_guest_request", { p_receipt_hash: await hashReceipt(receipt) });
@@ -113,7 +121,7 @@ async function updateReceiptStatus() {
     if (status === "approved") { message.textContent = "Your request has been approved. Your invitation is ready."; approvedLink.href = "invite.html"; approvedLink.hidden = false; }
     else if (status === "pending") message.textContent = "Your request has been received and is awaiting approval. Please keep this private link and return to check again.";
     else message.textContent = "This request has not been approved. Please contact the couple if you believe this is an error.";
-  } catch (_) { message.textContent = "We couldn't check this return link. Please try again later."; }
+  } catch (error) { logInviteFailure("check_request_status", error); message.textContent = "We couldn't check this return link. Please try again later."; }
 }
 async function loadInvitation() {
   if (!inviteContent) return;
@@ -121,22 +129,25 @@ async function loadInvitation() {
   if (invalidReceiptLink) { showInvite(false, "This private return link is invalid. Invitation access is unavailable."); return; }
   const receipt = activeReceipt;
   if (!receipt) { showInvite(false, "Use your private RSVP return link to check approval and view the invitation."); return; }
+  let failureStage = "check_request_status";
   try {
     const status = await checkRequest(await getClient(), receipt);
     if (status !== "approved") { showInvite(false, status === "pending" ? "Your request is awaiting approval. Invitation access will be available if approved." : "Invitation access is not available for this request."); return; }
     const receiptHash = await hashReceipt(receipt);
+    failureStage = "fetch_invitation_content";
     const response = await fetch(projectUrl + "/functions/v1/protected-invite", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
-    if (!response.ok) throw new Error("Invitation unavailable");
+    if (!response.ok) { const error = new Error("Invitation content request failed"); error.httpStatus = response.status; throw error; }
     const payload = await response.json();
     document.getElementById("invite-message").textContent = payload.message;
     const details = document.getElementById("invite-details"); details.replaceChildren();
     payload.details.forEach((line, i) => { if (i) details.appendChild(document.createElement("br")); if (line) details.appendChild(document.createTextNode(line)); });
     document.getElementById("invite-dresscode").textContent = payload.dressCode;
+    failureStage = "fetch_invitation_image";
     const imageResponse = await fetch(projectUrl + "/functions/v1/protected-invite?asset=invite.png", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
-    if (!imageResponse.ok) throw new Error("Invitation image unavailable");
+    if (!imageResponse.ok) { const error = new Error("Invitation image request failed"); error.httpStatus = imageResponse.status; throw error; }
     document.getElementById("private-invite-image").src = URL.createObjectURL(await imageResponse.blob());
     showInvite(true, "");
-  } catch (_) { showInvite(false, "Invitation access could not be verified. Please return using your private RSVP link and try again."); }
+  } catch (error) { logInviteFailure(failureStage, error); showInvite(false, "Invitation access could not be verified. Please return using your private RSVP link and try again."); }
 }
 
 const form = document.getElementById("rsvp-form"), statusEl = document.getElementById("rsvp-status");

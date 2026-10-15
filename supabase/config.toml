@@ -1,0 +1,11 @@
+project_id = "subuola-olaoluwa-2026"
+
+[db]
+major_version = 15
+
+[functions.protected-invite]
+verify_jwt = false
+static_files = ["./functions/protected-invite/invite.png"]
+
+[functions.approve-guest]
+verify_jwt = true

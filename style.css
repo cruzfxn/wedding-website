@@ -121,7 +121,7 @@ img {
 
 .hero-image-placeholder {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
   height: auto;
   border-radius: 8px;
   margin-bottom: var(--spacing-md);
