@@ -233,8 +233,7 @@ if (form && statusEl) {
       statusEl.textContent = "Your request has been received and is awaiting approval. Save the private return link below to check its status later.";
       const section = document.getElementById("receipt-status"); section.hidden = false;
       document.getElementById("receipt-message").textContent = "Pending approval. Keep your return link safe. Anyone with it can access this request.";
-      const returnLink = document.createElement("a"); returnLink.href = link.href; returnLink.textContent = "Open private return link"; returnLink.className = "private-return-link"; section.appendChild(returnLink);
-      if (navigator.clipboard) { const copy = document.createElement("button"); copy.className = "text-button copy-receipt"; copy.type = "button"; copy.textContent = "Copy return link"; copy.addEventListener("click", async () => { try { await navigator.clipboard.writeText(link.href); copy.textContent = "Link copied"; } catch (_) { copy.textContent = "Copy unavailable; save the link above"; } }); section.appendChild(copy); }
+      const returnLink = document.createElement("a"); returnLink.href = link.href; returnLink.textContent = "View Your Invitation"; returnLink.className = "btn btn-primary private-return-link"; section.appendChild(returnLink);
     } catch (error) {
       const diagnostic = { stage: failureStage, operation: failureOperation };
       if (typeof error?.code === "string" && /^[A-Z0-9]{4,8}$/.test(error.code)) diagnostic.code = error.code;
