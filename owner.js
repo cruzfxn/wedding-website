@@ -8,6 +8,7 @@ const requestBody = document.getElementById("owner-requests");
 const filter = document.getElementById("owner-filter");
 let client;
 let requestRows = [];
+const deletingRequests = new Set();
 
 function setFeedback(message, state = "info") {
   feedback.textContent = message;
@@ -72,6 +73,7 @@ function renderRequests() {
       actionButton(actions, request, "approve", "Approve", "btn btn-primary");
       actionButton(actions, request, "reopen", "Return to pending", "btn btn-secondary");
     }
+    actionButton(actions, request, "delete", "Delete Request", "btn btn-secondary");
     addCell(row, actions);
     requestBody.appendChild(row);
   }
@@ -94,17 +96,18 @@ async function loadRequests() {
     await client.auth.signOut();
     setSignedIn(false);
     setFeedback("This account is not authorized to view guest requests. Sign in with the approved owner account.", "error");
-    return;
+    return false;
   }
   const { data, error } = await client.rpc("admin_list_invitation_requests");
   if (error || !Array.isArray(data)) {
     setFeedback("Guest requests could not be loaded. Check your connection and try again.", "error");
-    return;
+    return false;
   }
   requestRows = data;
   renderRequests();
   setSignedIn(true);
   setFeedback(`${requestRows.length} requests loaded.`, "success");
+  return true;
 }
 
 async function approveRequest(requestId) {
@@ -127,6 +130,19 @@ async function updateStatus(requestId, status) {
   return { message: `Request status changed to ${status}.`, state: "success" };
 }
 
+async function deleteRequest(requestId) {
+  const { data, error } = await client.functions.invoke("delete-request", { body: { requestId } });
+  let result = data;
+  if (!result && error?.context && typeof error.context.json === "function") {
+    try { result = await error.context.json(); } catch (_) { result = null; }
+  }
+  if (error || result?.deleted !== true) {
+    const message = typeof result?.error === "string" ? result.error : "The request could not be deleted. Refresh the list and try again.";
+    throw new Error(message);
+  }
+  return { message: "Request deleted.", state: "success" };
+}
+
 loginForm.addEventListener("submit", async event => {
   event.preventDefault();
   const button = loginForm.querySelector("button[type='submit']");
@@ -147,6 +163,28 @@ requestBody.addEventListener("click", async event => {
   if (!button) return;
   const request = requestRows.find(item => item.request_id === button.dataset.requestId);
   if (!request) return;
+  const action = button.dataset.action;
+  if (action === "delete") {
+    if (deletingRequests.has(request.request_id)) return;
+    const confirmed = window.confirm(`Permanently delete the invitation request for ${request.full_name}? This cannot be undone. The related approval email history will also be deleted.`);
+    if (!confirmed) return;
+    deletingRequests.add(request.request_id);
+    button.disabled = true;
+    button.textContent = "Deleting…";
+    try {
+      const result = await deleteRequest(request.request_id);
+      let refreshed = false;
+      try { refreshed = await loadRequests(); } catch (_) { /* The deletion is confirmed; report the refresh issue below. */ }
+      setFeedback(refreshed ? result.message : "Request deleted, but the list could not refresh. Use Refresh to reload it.", refreshed ? "success" : "error");
+    } catch (error) {
+      try { await loadRequests(); } catch (_) { /* Keep the deletion error visible if refreshing also fails. */ }
+      setFeedback(error.message || "The request could not be deleted. Refresh the list and try again.", "error");
+    } finally {
+      deletingRequests.delete(request.request_id);
+      button.disabled = false;
+    }
+    return;
+  }
   const transitions = {
     approve: { status: "approved", prompt: `Approve the request for ${request.full_name}?` },
     reject: { status: "rejected", prompt: `Reject the request for ${request.full_name}?` },

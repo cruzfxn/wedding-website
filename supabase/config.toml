@@ -9,3 +9,6 @@ static_files = ["./functions/protected-invite/invite.png"]
 
 [functions.approve-guest]
 verify_jwt = true
+
+[functions.delete-request]
+verify_jwt = true
