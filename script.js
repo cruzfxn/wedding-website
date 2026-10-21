@@ -181,6 +181,18 @@ async function loadInvitation() {
     showInvite(true, "");
   } catch (error) { logInviteFailure(failureStage, error); showInvite(false, "We couldn't verify invitation access just now. Check your connection and try again.", true); }
 }
+async function updateInviteNavigation() {
+  if (!inviteLinks.length || inviteContent) return;
+  inviteLinks.forEach(link => { link.hidden = true; if (link.closest("li")) link.closest("li").hidden = true; });
+  if (invalidReceiptLink || !activeReceipt) return;
+  try {
+    const status = await checkRequest(await getClient(), activeReceipt);
+    const allowed = status === "approved";
+    inviteLinks.forEach(link => { link.hidden = !allowed; if (link.closest("li")) link.closest("li").hidden = !allowed; });
+  } catch (error) {
+    logInviteFailure("check_invite_navigation_eligibility", error);
+  }
+}
 const inviteRetry = document.getElementById("invite-retry");
 if (inviteRetry) inviteRetry.addEventListener("click", () => void loadInvitation());
 
@@ -265,4 +277,4 @@ if (copyAccount) copyAccount.addEventListener("click", async () => {
   try { await navigator.clipboard.writeText("6510147606"); feedback.textContent = "Account number copied."; }
   catch (_) { feedback.textContent = "Copy failed. Please select the account number manually."; }
 });
-updateReceiptStatus(); loadInvitation();
+updateReceiptStatus(); loadInvitation(); updateInviteNavigation();

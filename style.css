@@ -563,6 +563,14 @@ img {
   box-shadow: 0 8px 24px rgba(47, 75, 60, 0.08);
   text-align: center;
 }
+.programme-card { max-width: 900px; padding: var(--spacing-md); }
+.programme-image {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  height: auto;
+  margin: 0 auto;
+}
 .coming-soon-card h2 { color: var(--color-primary); font-size: 2rem; margin: 0.5rem 0; }
 .coming-soon-card > p:last-child { max-width: 550px; margin: 0 auto; color: #5A5548; }
 .registry-message > p { margin: 0.8rem auto; max-width: 650px; color: #5A5548; }

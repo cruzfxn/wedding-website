@@ -23,7 +23,8 @@ const publicImages = [
   "background.jpg",
   "couple.png",
   "menu.jpg",
-  "programme.jpeg"
+  "programme.jpeg",
+  "wedding-programme.png"
 ];
 
 rmSync(outputDir, { recursive: true, force: true });
