@@ -586,48 +586,19 @@ img {
 .invite-content {
   max-width: 600px;
   margin: 0 auto;
-  padding: var(--spacing-lg) var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-md) 0;
   text-align: center;
 }
 
 .invite-image-wrap {
   width: min(100%, 520px);
-  margin: 0 auto var(--spacing-md);
+  margin: 0 auto;
 }
 
 .invite-image {
   width: 100%;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(47, 75, 60, 0.14);
-}
-
-.invite-message {
-  color: #5A5548;
-  margin-bottom: var(--spacing-sm);
-}
-
-.invite-names {
-  font-size: 2.5rem;
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-md);
-}
-
-.invite-names span {
-  color: var(--color-accent);
-  font-style: italic;
-}
-
-.invite-details {
-  line-height: 1.9;
-  margin-bottom: var(--spacing-md);
-}
-
-.invite-dresscode {
-  color: var(--color-accent);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.85rem;
 }
 
 /* ===== 16. INFO PAGE ===== */

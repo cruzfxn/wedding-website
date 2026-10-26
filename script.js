@@ -119,8 +119,6 @@ function showInvite(allowed, message, retryable = false) {
   if (inviteHeader) inviteHeader.hidden = !allowed;
   if (inviteContent) inviteContent.hidden = !allowed;
   if (!allowed && inviteContent) {
-    ["invite-message", "invite-dresscode"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ""; });
-    const details = document.getElementById("invite-details"); if (details) details.replaceChildren();
     const image = document.getElementById("private-invite-image"); if (image) image.removeAttribute("src");
   }
   if (inviteStatus) { inviteStatus.hidden = allowed; inviteStatus.textContent = message || ""; }
@@ -166,14 +164,6 @@ async function loadInvitation() {
     const status = await checkRequest(await getClient(), receipt);
     if (status !== "approved") { showInvite(false, status === "pending" ? "Your request is awaiting approval. Invitation access will be available if approved." : "Invitation access is not available for this request."); return; }
     const receiptHash = await hashReceipt(receipt);
-    failureStage = "fetch_invitation_content";
-    const response = await fetchWithTimeout(projectUrl + "/functions/v1/protected-invite", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
-    if (!response.ok) { const error = new Error("Invitation content request failed"); error.httpStatus = response.status; throw error; }
-    const payload = await response.json();
-    document.getElementById("invite-message").textContent = payload.message;
-    const details = document.getElementById("invite-details"); details.replaceChildren();
-    payload.details.forEach((line, i) => { if (i) details.appendChild(document.createElement("br")); if (line) details.appendChild(document.createTextNode(line)); });
-    document.getElementById("invite-dresscode").textContent = payload.dressCode;
     failureStage = "fetch_invitation_image";
     const imageResponse = await fetchWithTimeout(projectUrl + "/functions/v1/protected-invite?asset=invite.png", { headers: { apikey: publishableKey, Authorization: "Bearer " + receiptHash } });
     if (!imageResponse.ok) { const error = new Error("Invitation image request failed"); error.httpStatus = imageResponse.status; throw error; }
