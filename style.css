@@ -387,6 +387,7 @@ img {
 .field-hint { color: #766f62; font-size: 0.9rem; }
 .identity-limit { margin-top: 1.5rem; padding: 1rem; border-left: 3px solid var(--color-accent); background: var(--color-bg); color: #5A5548; font-size: 0.9rem; }
 .delivery-note { margin: 1rem 0; padding: 0.85rem 1rem; color: #5A5548; background: var(--color-bg); border-left: 3px solid var(--color-accent); }
+.rsvp-children-notice { margin: 0 0 1rem; padding: 0.9rem 1rem; border-left: 3px solid #7A343D; border-radius: 4px; background: #FBF8F3; color: #4A292D; font-size: 1rem; font-weight: 700; }
 .copy-receipt { margin-top: 0.8rem; }
 
 .rsvp-status,
