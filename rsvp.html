@@ -43,11 +43,10 @@
           <label class="radio-option"><input type="radio" name="attending" value="yes" required> Yes, joyfully accepts</label>
           <label class="radio-option"><input type="radio" name="attending" value="no" required> No, regretfully declines</label>
         </fieldset>
-        <div id="guest-count-wrap"><label for="guest-count">Total party size</label><p class="field-hint">Include yourself. You may bring up to two companions.</p>
-          <select id="guest-count" name="guestCount"><option value="1">1 attendee</option><option value="2">2 attendees</option><option value="3">3 attendees</option></select>
+        <div id="guest-count-wrap"><label for="guest-count">Total party size</label><p class="field-hint">Include yourself. You may bring up to one companion.</p>
+          <select id="guest-count" name="guestCount"><option value="1">1 attendee</option><option value="2">2 attendees</option></select>
         </div>
         <div id="second-guest-wrap" hidden><label for="second-guest">Second Attendee's Full Name</label><input id="second-guest" name="secondGuest" type="text" autocomplete="off" maxlength="120" pattern=".*\S.*" title="Enter the second attendee's full name."></div>
-        <div id="third-guest-wrap" hidden><label for="third-guest">Third Attendee's Full Name</label><input id="third-guest" name="thirdGuest" type="text" autocomplete="off" maxlength="120" pattern=".*\S.*" title="Enter the third attendee's full name."></div>
         <label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254">
         <label for="phone">Phone Number</label><input id="phone" name="phone" type="tel" autocomplete="tel" required minlength="7" maxlength="30" pattern="[+0-9 .\(\)\-]{7,30}" aria-describedby="phone-hint"><span id="phone-hint" class="field-hint">Include your country code if you are outside Nigeria.</span>
         <button id="rsvp-submit" class="btn btn-primary rsvp-submit" type="submit">Submit RSVP</button>
