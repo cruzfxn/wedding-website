@@ -187,17 +187,15 @@ const inviteRetry = document.getElementById("invite-retry");
 if (inviteRetry) inviteRetry.addEventListener("click", () => void loadInvitation());
 
 const form = document.getElementById("rsvp-form"), statusEl = document.getElementById("rsvp-status");
-if (form && statusEl) {
-  const count = document.getElementById("guest-count"), countWrap = document.getElementById("guest-count-wrap"), secondWrap = document.getElementById("second-guest-wrap"), secondGuest = document.getElementById("second-guest"), thirdWrap = document.getElementById("third-guest-wrap"), thirdGuest = document.getElementById("third-guest");
+const count = document.getElementById("guest-count"), countWrap = document.getElementById("guest-count-wrap"), secondWrap = document.getElementById("second-guest-wrap"), secondGuest = document.getElementById("second-guest"), submitButton = document.getElementById("rsvp-submit");
+if (form && statusEl && count && countWrap && secondWrap && secondGuest && submitButton) {
   let isSubmitting = false;
   const updateFields = () => {
     const attending = form.querySelector('input[name="attending"]:checked')?.value === "yes";
     countWrap.hidden = !attending; count.disabled = !attending;
-    const partySize = Number(count.value);
+    const partySize = Math.min(2, Math.max(1, Number(count.value) || 1));
     secondWrap.hidden = !attending || partySize < 2; secondGuest.required = !secondWrap.hidden; secondGuest.disabled = secondWrap.hidden;
-    thirdWrap.hidden = !attending || partySize < 3; thirdGuest.required = !thirdWrap.hidden; thirdGuest.disabled = thirdWrap.hidden;
     if (secondWrap.hidden) secondGuest.value = "";
-    if (thirdWrap.hidden) thirdGuest.value = "";
   };
   form.querySelectorAll('input[name="attending"]').forEach(input => input.addEventListener("change", updateFields)); count.addEventListener("change", updateFields); updateFields();
   if (activeReceipt || invalidReceiptLink) form.hidden = true;
@@ -207,7 +205,7 @@ if (form && statusEl) {
     if (isSubmitting) return;
     form.querySelectorAll("[aria-invalid='true']").forEach(el => { el.removeAttribute("aria-invalid"); });
     if (!form.reportValidity()) { const invalid = form.querySelector(":invalid"); if (invalid) { invalid.setAttribute("aria-invalid", "true"); invalid.focus(); } statusEl.textContent = "Please check the highlighted fields and try again."; statusEl.dataset.state = "error"; return; }
-    const button = document.getElementById("rsvp-submit"), data = new FormData(form), attending = data.get("attending") === "yes";
+    const button = submitButton, data = new FormData(form), attending = data.get("attending") === "yes";
     isSubmitting = true; button.disabled = true; button.textContent = "Submitting…"; statusEl.textContent = "Sending your request securely…"; statusEl.dataset.state = "info";
     let failureStage = "prepare";
     let failureOperation = "create_receipt";
@@ -223,19 +221,26 @@ if (form && statusEl) {
       const response = await db.rpc("submit_guest_request", {
         p_full_name: String(data.get("fullName")).trim(), p_email: String(data.get("email")).trim(), p_phone: String(data.get("phone")).trim(),
         p_attending: attending,
-        p_second_guest_name: attending && Number(count.value) >= 2 ? String(data.get("secondGuest")).trim() : null,
-        p_third_guest_name: attending && Number(count.value) === 3 ? String(data.get("thirdGuest")).trim() : null,
+        p_second_guest_name: attending && Number(count.value) === 2 ? String(data.get("secondGuest")).trim() : null,
+        p_third_guest_name: null,
         p_receipt_hash: receiptHash
       });
       if (response.error) throw response.error;
       failureStage = "show_confirmation";
       failureOperation = "render_confirmation";
       const link = new URL("rsvp.html", location.href); link.hash = "receipt=" + returnReceipt;
+      activeReceipt = returnReceipt;
+      try { sessionStorage.setItem("weddingGuestReceipt", returnReceipt); } catch (_) { /* The visible private return link remains available. */ }
       form.hidden = true; statusEl.dataset.state = "success";
-      statusEl.textContent = "Your request has been received and is awaiting approval. Save the private return link below to check its status later.";
+      statusEl.textContent = "Your request has been submitted. Its current status is shown below.";
       const section = document.getElementById("receipt-status"); section.hidden = false;
-      document.getElementById("receipt-message").textContent = "Pending approval. Keep your return link safe. Anyone with it can access this request.";
-      const returnLink = document.createElement("a"); returnLink.href = link.href; returnLink.textContent = "View Your Invitation"; returnLink.className = "btn btn-primary private-return-link"; section.appendChild(returnLink);
+      const returnLink = document.createElement("a"); returnLink.href = link.href; returnLink.textContent = "Open private return link"; returnLink.className = "private-return-link"; section.appendChild(returnLink);
+      if (navigator.clipboard) {
+        const copy = document.createElement("button"); copy.className = "text-button copy-receipt"; copy.type = "button"; copy.textContent = "Copy return link";
+        copy.addEventListener("click", async () => { try { await navigator.clipboard.writeText(link.href); copy.textContent = "Link copied"; } catch (_) { copy.textContent = "Copy unavailable; save the link above"; } });
+        section.appendChild(copy);
+      }
+      await updateReceiptStatus();
     } catch (error) {
       const diagnostic = { stage: failureStage, operation: failureOperation };
       if (typeof error?.code === "string" && /^[A-Z0-9]{4,8}$/.test(error.code)) diagnostic.code = error.code;
@@ -248,7 +253,7 @@ if (form && statusEl) {
       console.error("RSVP submission failed", diagnostic);
       statusEl.dataset.state = "error";
       if (error?.code === "SECURE_CRYPTO_UNAVAILABLE") {
-        statusEl.textContent = "Your browser needs a secure connection to submit this request. Please open this page using its HTTPS address and try again; your details are still here.";
+        statusEl.textContent = "Secure cryptography is unavailable in this browser context. For local testing, open this page at http://127.0.0.1:4173/rsvp.html; hosted pages must use HTTPS. Your details are still here.";
       } else if (error?.code === "PGRST202" || error?.code === "42883") {
         statusEl.textContent = "The RSVP service needs an update before it can accept requests. Your details are still here; please try again later.";
       } else if (error?.code === "22023" || error?.code === "23514") {
